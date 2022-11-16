@@ -1,0 +1,29 @@
+version: '3.7'
+services:
+  web:
+    build: ./web
+    volumes:
+      - ./www/docker-app:./app
+      - bundle_volumes:/usr/local/bundle
+      - yarn-volume:/app/node_modules
+    depends_on:
+      - db
+    command: sh /scripts/command.sh
+    ports:
+      - 3000:3000
+
+  db:
+    build:
+      context: ./db
+      dockerfile: ./Dockerfile.postges
+    environment:
+      - POSTGRES_USER=vareal
+      - POSTGRES_PASSWORD=vareal123
+    volumes:
+      - db_volumes:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+volumes:
+  bundle_volumes:
+  db_volumes:
+  yarn-volume:
